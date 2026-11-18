@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
     <title>Forumet</title>
-    <link rel="stylesheet" href="{{ url_for(filename='stylish.css') }}">
+    <link rel="stylesheet" href="stylish.css">
 </head>
 <body>
 
@@ -11,7 +12,25 @@
 
     <h2>Välkommen, {{ session["username"] }}!</h2>
 
-    <p>Du är nu inloggad.</p>
+    <a href="{{ url_for('create_topic') }}">
+        <button>Skapa ny diskussion</button>
+    </a>
+
+    <h2>Alla diskussioner</h2>
+
+    {% for topic in topics %}
+
+        <div class="topic">
+            <h3>{{ topic["title"] }}</h3>
+
+            <p>Skapad av: {{ topic["username"] }}</p>
+        </div>
+
+    {% else %}
+
+        <p>Det finns inga diskussioner ännu.</p>
+
+    {% endfor %}
 
     <a href="{{ url_for('logout') }}">Logga ut</a>
 

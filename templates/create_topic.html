@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <title>Skapa diskussion</title>
+    <link rel="stylesheet" href="stylish.css">
+</head>
+<body>
+
+    <h1>Starta en ny diskussion</h1>
+
+    <form method="POST">
+
+        <label>Diskussionens rubrik:</label>
+
+        <input type="text" name="title"
+               placeholder="Vad vill du diskutera?" required>
+
+        <button type="submit">Skapa diskussion</button>
+
+    </form>
+
+    <a href="{{ url_for('home') }}">Tillbaka till forumet</a>
+
+</body>
+</html>

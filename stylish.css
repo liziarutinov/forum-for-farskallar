@@ -40,3 +40,16 @@ button:hover {
 .error {
     color: red;
 }
+
+.topic {
+    background-color: white;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 600px;
+    border-radius: 10px;
+    text-align: left;
+}
+
+.topic h3 {
+    margin-top: 0;
+}

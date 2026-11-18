@@ -17,8 +17,8 @@ def create_test_users():
     cursor = conn.cursor()
 
     test_users = [
-        ("farskalle1", "password123"),
-        ("farskalle2", "password456")
+        ("cjutegirl", "password123"),
+        ("boiboi", "password456")
     ]
 
     for username, password in test_users:
@@ -40,17 +40,6 @@ def create_test_users():
 
 
 create_test_users()
-
-
-# Startsidan
-@app.route("/")
-def home():
-    if "user_id" not in session:
-        return redirect(url_for("login"))
-
-    return render_template("index.html")
-
-
 # Inloggning
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -87,6 +76,52 @@ def logout():
     session.clear()
     return redirect(url_for("login"))
 
+
+# Visa alla diskussionstrådar
+@app.route("/")
+def home():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT topics.*, users.username
+        FROM topics
+        JOIN users ON topics.user_id = users.id
+        ORDER BY topics.created_at DESC
+    """)
+
+    topics = cursor.fetchall()
+    conn.close()
+
+    return render_template("index.html", topics=topics)
+
+
+# Skapa en ny diskussionstråd
+@app.route("/create_topic", methods=["GET", "POST"])
+def create_topic():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        title = request.form["title"]
+
+        conn = connect_db()
+        cursor = conn.cursor()
+
+        cursor.execute(
+            "INSERT INTO topics (title, user_id) VALUES (?, ?)",
+            (title, session["user_id"])
+        )
+
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for("home"))
+
+    return render_template("create_topic.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
